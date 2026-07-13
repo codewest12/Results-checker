@@ -33,20 +33,19 @@ import {
 
 // Firebase Config derived from firebase-applet-config.json
 const firebaseConfig = {
-  projectId: "gen-lang-client-0875587119",
-  appId: "1:244474853281:web:f2a3702362db86a9e13de0",
-  apiKey: "AIzaSyAk0rQgGOQm7o-8_-LUOJbHP19BbfKRHOU",
-  authDomain: "gen-lang-client-0875587119.firebaseapp.com",
-  databaseId: "ai-studio-cssidoresultport-67fb11bd-c989-4846-b5d0-7af5848d111c",
-  storageBucket: "gen-lang-client-0875587119.firebasestorage.app",
-  messagingSenderId: "244474853281",
+  apiKey: "AIzaSyC9szFEBHmc1zeh8cofX8uwWxPBzYLuSfQ",
+  authDomain: "community-secondary-school-ido.firebaseapp.com",
+  projectId: "community-secondary-school-ido",
+  storageBucket: "community-secondary-school-ido.firebasestorage.app",
+  messagingSenderId: "86601384478",
+  appId: "1:86601384478:web:c558004beb9e000fdbe40f",
+  measurementId: "G-SQ14VLE1CQ",
 };
-
 // Initialize Firebase App
 const app = initializeApp(firebaseConfig);
 
 // Initialize Firestore with the named database from the config
-export const db = getFirestore(app, firebaseConfig.databaseId);
+export const db = getFirestore(app);
 
 // Initialize Auth
 export const auth = getAuth(app);
