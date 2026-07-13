@@ -1,4 +1,4 @@
-exportxportmport React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Lock, 
   User, 
@@ -69,7 +69,7 @@ import {
 import LandingPage from './components/LandingPage';
 import StudentPortal from './components/StudentPortal';
 import AdminPortal from './components/AdminPortal';
-import ContactAdminModal from './components/ContactAdmiexported';
+import ContactAdminModal from './components/ContactAdminModal';
 
 export default function App() {
   // ----------------------------------------------------
@@ -120,11 +120,12 @@ export default function App() {
   dbGetAnnouncements()
 ]);
 
-  if (dbSessions) setSessions(dbSessions);
-  if (dbSubjects) setSubjects(dbSubjects);
-  if (dbStudents) setStudents(dbStudents);
-  if (dbResults) setResults(dbResults);
-  if (dbRules) setGradingRules(dbRules);if       if (dbPinRequests && dbPinRequests.length > 0) setPinRequests(dbPinRequests);
+        if (dbSessions) setSessions(dbSessions);
+        if (dbSubjects) setSubjects(dbSubjects);
+        if (dbStudents) setStudents(dbStudents);
+        if (dbResults) setResults(dbResults);
+        if (dbRules) setGradingRules(dbRules);
+        if (dbPinRequests && dbPinRequests.length > 0) setPinRequests(dbPinRequests);
         if (dbAnnouncements && dbAnnouncements.length > 0) setAnnouncements(dbAnnouncements);
         if (dbNotifs && dbNotifs.length > 0) {
           setNotifications(dbNotifs);
