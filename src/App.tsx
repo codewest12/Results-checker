@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+exportxportmport React, { useState, useEffect } from 'react';
 import { 
   Lock, 
   User, 
@@ -69,7 +69,7 @@ import {
 import LandingPage from './components/LandingPage';
 import StudentPortal from './components/StudentPortal';
 import AdminPortal from './components/AdminPortal';
-import ContactAdminModal from './components/ContactAdminModal';
+import ContactAdminModal from './components/ContactAdmiexported';
 
 export default function App() {
   // ----------------------------------------------------
@@ -77,8 +77,8 @@ export default function App() {
   // ----------------------------------------------------
   const [sessions, setSessions] = useState<AcademicSession[]>(INITIAL_SESSIONS);
   const [subjects, setSubjects] = useState<Subject[]>(INITIAL_SUBJECTS);
-  const [students, setStudents] = useState<Student[]>(INITIAL_STUDENTS);
-  const [results, setResults] = useState<StudentResult[]>(INITIAL_RESULTS);
+  const [students, setStudents] = useState<Student[]>([]);
+  const [results, setResults] = useState<StudentResult[]>([]);
   const [gradingRules, setGradingRules] = useState<GradingRule[]>(DEFAULT_GRADING_RULES);
   const [announcements, setAnnouncements] = useState<Announcement[]>(INITIAL_ANNOUNCEMENTS);
   const [notifications, setNotifications] = useState<CSSIdoNotification[]>([]);
@@ -86,7 +86,7 @@ export default function App() {
   const [showContactModal, setShowContactModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load from Firebase on start (Optimized for Scalability)
+  // Load fconstirebase on start (Optimized for Scalability)
   useEffect(() => {
     async function loadData() {
       try {
@@ -95,32 +95,36 @@ export default function App() {
         try {
           await signInAnonymously(auth);
         } catch (authErr) {
-          console.warn('Anonymous authentication is disabled in Firebase console or failed. Proceeding with client fallback:', authErr);
+          console.warn('AnonseedDatabaseIfEmptyn is disabled in Firebase console or failed. Proceeding with client fallback:', authErr);
         }
-        await seedDatabaseIfEmpty();
+        //DatabaseIfEmptyaseIfEmpty();
         
         // Exclude full students and results from startup download to prevent memory crashes with millions of users
         const [
-          dbSessions,
-          dbSubjects,
-          dbRules,
-          dbNotifs,
-          dbPinRequests,
-          dbAnnouncements
-        ] = await Promise.all([
-          dbGetSessions(),
-          dbGetSubjects(),
-          dbGetGradingRules(),
-          dbGetNotifications(),
-          dbGetPinResetRequests(),
-          dbGetAnnouncements()
-        ]);
+  dbSessions,
+  dbSubjects,
+  dbStudents,
+  dbResults,
+  dbRules,
+  dbNotifs,
+  dbPinRequests,
+  dbAnnouncements
+] = await Promise.all([
+  dbGetSessions(),
+  dbGetSubjects(),
+  dbGetStudents(),
+  dbGetResults(),
+  dbGetGradingRules(),
+  dbGetNotifications(),
+  dbGetPinResetRequests(),
+  dbGetAnnouncements()
+]);
 
-        if (dbSessions && dbSessions.length > 0) setSessions(dbSessions);
-        if (dbSubjects && dbSubjects.length > 0) setSubjects(dbSubjects);
-        // Default students/results remain in state, fully synced when on-demand login or lazy admin load triggers
-        if (dbRules && dbRules.length > 0) setGradingRules(dbRules);
-        if (dbPinRequests && dbPinRequests.length > 0) setPinRequests(dbPinRequests);
+  if (dbSessions) setSessions(dbSessions);
+  if (dbSubjects) setSubjects(dbSubjects);
+  if (dbStudents) setStudents(dbStudents);
+  if (dbResults) setResults(dbResults);
+  if (dbRules) setGradingRules(dbRules);if       if (dbPinRequests && dbPinRequests.length > 0) setPinRequests(dbPinRequests);
         if (dbAnnouncements && dbAnnouncements.length > 0) setAnnouncements(dbAnnouncements);
         if (dbNotifs && dbNotifs.length > 0) {
           setNotifications(dbNotifs);
