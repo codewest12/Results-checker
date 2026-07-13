@@ -1,11 +1,11 @@
 {
-  "projectId": "gen-lang-client-0875587119",
-  "appId": "1:244474853281:web:f2a3702362db86a9e13de0",
-  "apiKey": "AIzaSyAk0rQgGOQm7o-8_-LUOJbHP19BbfKRHOU",
-  "authDomain": "gen-lang-client-0875587119.firebaseapp.com",
-  "firestoreDatabaseId": "ai-studio-cssidoresultport-67fb11bd-c989-4846-b5d0-7af5848d111c",
-  "storageBucket": "gen-lang-client-0875587119.firebasestorage.app",
-  "messagingSenderId": "244474853281",
-  "measurementId": "",
-  "oAuthClientId": "244474853281-iqs9ai8h6mhpfqd2j3lgaq0ncisiuhei.apps.googleusercontent.com"
+  "projectId": "community-secondary-school-ido",
+  "appId": "1:86601384478:web:c558004beb9e000fdbe40f",
+  "apiKey": "AIzaSyC9szFEBHmc1zeh8cofX8uwWxPBzYLuSfQ",
+  "authDomain": "community-secondary-school-ido.firebaseapp.com",
+  "firestoreDatabaseId": "(default)",
+  "storageBucket": "community-secondary-school-ido.firebasestorage.app",
+  "messagingSenderId": "86601384478",
+  "measurementId": "G-SQ14VLE1CQ",
+  "oAuthClientId": ""
 }
