@@ -1,0 +1,197 @@
+{
+  "entities": {
+    "Admin": {
+      "title": "Admin Session",
+      "description": "Administrative session key mapped to user uid",
+      "type": "object",
+      "properties": {
+        "password": {
+          "type": "string",
+          "description": "Validation credential"
+        },
+        "loggedInAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["password", "loggedInAt"]
+    },
+    "AcademicSession": {
+      "title": "Academic Session",
+      "description": "An academic year e.g., 2025/2026",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "isCurrent": { "type": "boolean" }
+      },
+      "required": ["id", "name", "isCurrent"]
+    },
+    "Subject": {
+      "title": "Subject",
+      "description": "School subject",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "code": { "type": "string" },
+        "classes": { "type": "array" }
+      },
+      "required": ["id", "name", "code", "classes"]
+    },
+    "Student": {
+      "title": "Student",
+      "description": "A registered student",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "regNo": { "type": "string" },
+        "pin": { "type": "string" },
+        "name": { "type": "string" },
+        "classId": { "type": "string" },
+        "department": { "type": "string" },
+        "passportUrl": { "type": "string" },
+        "gender": { "type": "string" },
+        "guardianPhone": { "type": "string" },
+        "guardianName": { "type": "string" }
+      },
+      "required": ["id", "regNo", "pin", "name", "classId", "department", "passportUrl", "gender"]
+    },
+    "StudentResult": {
+      "title": "Student Result",
+      "description": "Term assessment grades for a student",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "studentId": { "type": "string" },
+        "sessionId": { "type": "string" },
+        "term": { "type": "string" },
+        "classId": { "type": "string" },
+        "scores": { "type": "array" },
+        "totalScore": { "type": "number" },
+        "averageScore": { "type": "number" },
+        "overallGrade": { "type": "string" },
+        "classPosition": { "type": "number" },
+        "attendance": { "type": "number" },
+        "teacherRemark": { "type": "string" },
+        "principalRemark": { "type": "string" },
+        "isPublished": { "type": "boolean" },
+        "publishedDate": { "type": "string" },
+        "positionOverride": { "type": "string" }
+      },
+      "required": ["id", "studentId", "sessionId", "term", "classId", "scores", "totalScore", "averageScore", "overallGrade", "classPosition", "teacherRemark", "principalRemark", "isPublished"]
+    },
+    "GradingRule": {
+      "title": "Grading Rule",
+      "description": "Grade range mapping",
+      "type": "object",
+      "properties": {
+        "grade": { "type": "string" },
+        "minScore": { "type": "number" },
+        "maxScore": { "type": "number" },
+        "remark": { "type": "string" }
+      },
+      "required": ["grade", "minScore", "maxScore", "remark"]
+    },
+    "Announcement": {
+      "title": "Announcement",
+      "description": "Public school update",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "content": { "type": "string" },
+        "date": { "type": "string" },
+        "category": { "type": "string" }
+      },
+      "required": ["id", "title", "content", "date", "category"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "Administrative system status log",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "message": { "type": "string" },
+        "timestamp": { "type": "string" },
+        "type": { "type": "string" }
+      },
+      "required": ["id", "title", "message", "timestamp", "type"]
+    },
+    "PinResetRequest": {
+      "title": "Pin Reset Request",
+      "description": "A request submitted by a student to retrieve their registration credentials",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "regNo": { "type": "string" },
+        "studentName": { "type": "string" },
+        "contactInfo": { "type": "string" },
+        "message": { "type": "string" },
+        "status": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "resolvedAt": { "type": "string" }
+      },
+      "required": ["id", "regNo", "studentName", "contactInfo", "message", "status", "createdAt"]
+    },
+    "SmsLog": {
+      "title": "Sms Log",
+      "description": "Record of dispatch messages simulated by system",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "phone": { "type": "string" },
+        "name": { "type": "string" },
+        "regNo": { "type": "string" },
+        "pin": { "type": "string" },
+        "body": { "type": "string" },
+        "status": { "type": "string" },
+        "sentAt": { "type": "string" }
+      },
+      "required": ["id", "phone", "name", "regNo", "pin", "body", "status", "sentAt"]
+    }
+  },
+  "firestore": {
+    "admins/{uid}": {
+      "schema": "Admin",
+      "description": "Secured authorization tokens mapping admin privileges"
+    },
+    "sessions/{sessionId}": {
+      "schema": "AcademicSession",
+      "description": "Term structures available in school"
+    },
+    "subjects/{subjectId}": {
+      "schema": "Subject",
+      "description": "Core course classes available"
+    },
+    "students/{studentId}": {
+      "schema": "Student",
+      "description": "Registered students lookup table"
+    },
+    "results/{resultId}": {
+      "schema": "StudentResult",
+      "description": "Grades and scoring card per session and student"
+    },
+    "gradingRules/{ruleId}": {
+      "schema": "GradingRule",
+      "description": "Grading policy constraints"
+    },
+    "announcements/{announcementId}": {
+      "schema": "Announcement",
+      "description": "Announcements visible in dashboard feed"
+    },
+    "notifications/{notificationId}": {
+      "schema": "Notification",
+      "description": "Administrative system alert notifications"
+    },
+    "pinResetRequests/{requestId}": {
+      "schema": "PinResetRequest",
+      "description": "Support request tickets for credential recoveries"
+    },
+    "smsLogs/{logId}": {
+      "schema": "SmsLog",
+      "description": "SMS dispatch logs dashboard tracking"
+    }
+  }
+}

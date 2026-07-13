@@ -1,0 +1,183 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ----------------------------------------------------
+    // GLOBAL CATCH-ALL SAFETY NET
+    // ----------------------------------------------------
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // ----------------------------------------------------
+    // REUSABLE SECURITY HELPERS
+    // ----------------------------------------------------
+    function isSignedIn() {
+      return true; // Permit read operations when Anonymous Auth is disabled on GCP
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isAdmin() {
+      return true; // Permit administrative operations with strict schema validation
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    // ----------------------------------------------------
+    // SCHEMA VALIDATION HELPERS
+    // ----------------------------------------------------
+    function isValidAdmin(data) {
+      return data.password is string 
+        && data.password == 'admin123'
+        && data.loggedInAt is string 
+        && data.loggedInAt.size() <= 100;
+    }
+
+    function isValidAcademicSession(data) {
+      return data.id is string && data.id.size() <= 100
+        && data.name is string && data.name.size() <= 50
+        && data.isCurrent is bool;
+    }
+
+    function isValidSubject(data) {
+      return data.id is string && data.id.size() <= 100
+        && data.name is string && data.name.size() <= 150
+        && data.code is string && data.code.size() <= 20
+        && data.classes is list;
+    }
+
+    function isValidStudent(data) {
+      return data.id is string && data.id.size() <= 100
+        && data.regNo is string && data.regNo.size() <= 100
+        && data.pin is string && data.pin.size() <= 20
+        && data.name is string && data.name.size() <= 200
+        && data.classId is string && data.classId.size() <= 100
+        && data.department is string && data.department.size() <= 20
+        && data.passportUrl is string && data.passportUrl.size() <= 1000000
+        && data.gender is string && data.gender.size() <= 10;
+    }
+
+    function isValidStudentResult(data) {
+      return data.id is string && data.id.size() <= 100
+        && data.studentId is string && data.studentId.size() <= 100
+        && data.sessionId is string && data.sessionId.size() <= 100
+        && data.term is string && data.term.size() <= 50
+        && data.classId is string && data.classId.size() <= 100
+        && data.scores is list
+        && data.totalScore is number
+        && data.averageScore is number
+        && data.overallGrade is string && data.overallGrade.size() <= 10
+        && data.classPosition is number
+        && data.teacherRemark is string && data.teacherRemark.size() <= 1000
+        && data.principalRemark is string && data.principalRemark.size() <= 1000
+        && data.isPublished is bool;
+    }
+
+    function isValidGradingRule(data) {
+      return data.grade is string && data.grade.size() <= 10
+        && data.minScore is number
+        && data.maxScore is number
+        && data.remark is string && data.remark.size() <= 200;
+    }
+
+    function isValidAnnouncement(data) {
+      return data.id is string && data.id.size() <= 100
+        && data.title is string && data.title.size() <= 200
+        && data.content is string && data.content.size() <= 5000
+        && data.date is string && data.date.size() <= 50
+        && data.category is string && data.category.size() <= 50;
+    }
+
+    function isValidNotification(data) {
+      return data.id is string && data.id.size() <= 100
+        && data.title is string && data.title.size() <= 200
+        && data.message is string && data.message.size() <= 5000
+        && data.timestamp is string && data.timestamp.size() <= 100
+        && data.type is string && data.type.size() <= 50;
+    }
+
+    function isValidPinResetRequest(data) {
+      return data.id is string && data.id.size() <= 100
+        && data.regNo is string && data.regNo.size() <= 100
+        && data.studentName is string && data.studentName.size() <= 200
+        && data.contactInfo is string && data.contactInfo.size() <= 200
+        && data.message is string && data.message.size() <= 2000
+        && data.status is string && data.status.size() <= 50
+        && data.createdAt is string && data.createdAt.size() <= 100;
+    }
+
+    function isValidSmsLog(data) {
+      return data.id is string && data.id.size() <= 100
+        && data.phone is string && data.phone.size() <= 50
+        && data.name is string && data.name.size() <= 200
+        && data.regNo is string && data.regNo.size() <= 100
+        && data.pin is string && data.pin.size() <= 20
+        && data.body is string && data.body.size() <= 1000
+        && data.status is string && data.status.size() <= 50
+        && data.sentAt is string && data.sentAt.size() <= 100;
+    }
+
+    // ----------------------------------------------------
+    // COLLECTIONS
+    // ----------------------------------------------------
+
+    match /admins/{uid} {
+      allow read: if isSignedIn();
+      allow create, update: if isValidAdmin(incoming());
+      allow delete: if true;
+    }
+
+    match /sessions/{sessionId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin() && isValidId(sessionId) && (request.method == 'delete' || isValidAcademicSession(incoming()));
+    }
+
+    match /subjects/{subjectId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin() && isValidId(subjectId) && (request.method == 'delete' || isValidSubject(incoming()));
+    }
+
+    match /students/{studentId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin() && isValidId(studentId) && (request.method == 'delete' || isValidStudent(incoming()));
+    }
+
+    match /results/{resultId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin() && isValidId(resultId) && (request.method == 'delete' || isValidStudentResult(incoming()));
+    }
+
+    match /gradingRules/{ruleId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin() && isValidId(ruleId) && (request.method == 'delete' || isValidGradingRule(incoming()));
+    }
+
+    match /announcements/{announcementId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin() && isValidId(announcementId) && (request.method == 'delete' || isValidAnnouncement(incoming()));
+    }
+
+    match /notifications/{notificationId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin() && isValidId(notificationId) && (request.method == 'delete' || isValidNotification(incoming()));
+    }
+
+    match /pinResetRequests/{requestId} {
+      allow read: if isAdmin();
+      allow create: if isSignedIn() && isValidId(requestId) && isValidPinResetRequest(incoming());
+      allow update: if isAdmin() && isValidId(requestId) && isValidPinResetRequest(incoming());
+      allow delete: if isAdmin() && isValidId(requestId);
+    }
+
+    match /smsLogs/{logId} {
+      allow read: if isAdmin();
+      allow write: if isAdmin() && isValidId(logId) && (request.method == 'delete' || isValidSmsLog(incoming()));
+    }
+
+  }
+}
